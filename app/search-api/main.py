@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Query
 from datetime import datetime
 import logging
+import os
 
 # Basic logging configuration
 logging.basicConfig(level=logging.INFO)
@@ -19,12 +20,11 @@ def health_check():
 
 
 @app.get("/search")
-def search(
-    q: str = Query(..., min_length=1, description="Search query")
-):
-    logger.info(f"Search request received | query={q}")
+def search(q: str = Query(..., min_length=1)):
+    environment = os.getenv("ENVIRONMENT", "dev")
 
-    # Simulated search results
+    logger.info(f"[{environment}] Search request | query={q}")
+
     results = [
         {"id": 1, "title": f"{q} result one"},
         {"id": 2, "title": f"{q} result two"},
@@ -32,6 +32,7 @@ def search(
     ]
 
     return {
+        "env": environment,  
         "query": q,
         "count": len(results),
         "results": results,
