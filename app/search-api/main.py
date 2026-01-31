@@ -36,6 +36,7 @@ def search(q: str = Query(..., min_length=1)):
         "query": q,
         "count": len(results),
         "results": results,
+        "cd_test": "deployed via github actions",
         "timestamp": datetime.utcnow()
     }
 
